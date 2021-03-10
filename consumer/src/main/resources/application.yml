@@ -1,0 +1,14 @@
+application:
+  protocol:
+    name: dubbo
+    port: 12345
+    payload: 8388608
+  consumer:
+    timeout: 30000
+server:
+  port: 8080
+logging:
+  root: debug
+spring:
+  application:
+    name: client
