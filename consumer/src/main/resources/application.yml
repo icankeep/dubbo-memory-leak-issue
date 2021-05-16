@@ -1,12 +1,13 @@
-application:
+dubbo:
   protocol:
-    name: dubbo
-    port: 12345
+    name: protostuff
+    port: 20880
     payload: 8388608
-  consumer:
-    timeout: 30000
+    serialization: hessian2
+  registry:
+    address: zookeeper://127.0.0.1:2181
 server:
-  port: 8080
+  port: 8082
 logging:
   root: debug
 spring:

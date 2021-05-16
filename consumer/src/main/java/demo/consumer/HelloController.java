@@ -2,22 +2,44 @@ package demo.consumer;
 
 import demo.api.Api;
 import org.apache.dubbo.config.annotation.DubboReference;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SpringBootTest(classes = Application.class)
-@RunWith(SpringRunner.class)
-public class ApplicationTest {
+/**
+ * @author passer
+ * @date 2021/5/15
+ */
+@RestController
+public class HelloController {
 
     @DubboReference(version = "1.0")
     private Api api;
+    private int taskCount = 100;
+    private ExecutorService executor = Executors.newFixedThreadPool(taskCount);
+
+    @GetMapping("/hello")
+    public String hello() {
+        return "hello world";
+    }
+
+    @GetMapping("/dubbo")
+    public void dubbo() throws Exception {
+        test();
+    }
+
+    @GetMapping("/local")
+    public void local() throws Exception {
+        testNative();
+    }
+
 
     private Api apiNative = new Api() {
         @Override
@@ -31,18 +53,12 @@ public class ApplicationTest {
         }
     };
 
-    private int taskCount = 100;
 
-    private ExecutorService executor = Executors.newFixedThreadPool(taskCount);
-
-    @Test
     public void test() throws Exception {
         System.out.println("hello");
         testFunc(api);
     }
 
-
-    @Test
     public void testNative() throws Exception {
         testFunc(apiNative);
     }
